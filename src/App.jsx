@@ -7,6 +7,7 @@ import DevicesPage     from './pages/DevicesPage';
 import AlarmsPage      from './pages/AlarmsPage';
 import TrendsPage      from './pages/TrendsPage';
 import EventLogPage    from './pages/EventLogPage';
+import ScenariosPage   from './pages/ScenariosPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import Sidebar         from './components/Sidebar';
 
@@ -34,10 +35,9 @@ export default function App() {
             <Route path="/alarms"      element={<AlarmsPage />}     />
             <Route path="/trends"      element={<TrendsPage />}     />
             <Route path="/events"      element={<EventLogPage />}   />
-            {/* Remaining pages — wire up as backend adds endpoints */}
+            <Route path="/schedules"   element={<ScenariosPage />}  />
             <Route path="/objects"     element={<PlaceholderPage name="Object Explorer" />} />
             <Route path="/livepoints"  element={<PlaceholderPage name="Live Points" />}     />
-            <Route path="/schedules"   element={<PlaceholderPage name="Schedules" />}       />
             <Route path="/energy"      element={<PlaceholderPage name="Energy" />}          />
             <Route path="/performance" element={<PlaceholderPage name="Performance" />}     />
             <Route path="/reports"     element={<PlaceholderPage name="Reports" />}         />

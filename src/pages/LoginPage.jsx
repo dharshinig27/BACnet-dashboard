@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
 
+const VALID_USERNAME = 'admin';
+const VALID_PASSWORD = 'admin123';
+
 export default function LoginPage({ onLogin }) {
-  const [email,    setEmail]    = useState('admin@building.io');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
+  const [loading,  setLoading]  = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!email || !password) {
-      setError('Please fill in all fields.');
+    if (!username || !password) {
+      setError('Please enter both username and password.');
       return;
     }
     setError('');
     setLoading(true);
-    // Simulate auth — replace with real API call later
     setTimeout(() => {
-      setLoading(false);
-      onLogin();
-    }, 1000);
+      if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        onLogin();
+      } else {
+        setError('Invalid username or password.');
+        setLoading(false);
+      }
+    }, 800);
   }
 
   return (
@@ -28,6 +34,7 @@ export default function LoginPage({ onLogin }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      fontFamily: "'DM Sans', sans-serif",
     }}>
       <div style={{ width: 400 }}>
 
@@ -55,25 +62,31 @@ export default function LoginPage({ onLogin }) {
           border: '1px solid #e2ede8',
           padding: '36px 32px',
         }}>
-          <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700, color: '#0f2d1e' }}>Sign in</h2>
+          <h2 style={{ margin: '0 0 4px', fontSize: 22, fontWeight: 700, color: '#0f2d1e' }}>
+            Sign in
+          </h2>
           <p style={{ margin: '0 0 28px', fontSize: 14, color: '#5a7d6b' }}>
-            Building Automation &amp; Control Network
+            Building Automation & Control Network
           </p>
 
           <form onSubmit={handleSubmit}>
+
+            {/* Username */}
             <div style={{ marginBottom: 16 }}>
               <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1a3d2b', marginBottom: 6 }}>
-                Email
+                Username
               </label>
               <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="admin@building.io"
-                style={inputStyle}
+                type="text"
+                value={username}
+                onChange={e => { setUsername(e.target.value); setError(''); }}
+                placeholder="Enter your username"
+                autoComplete="username"
+                style={inputStyle(error && !username)}
               />
             </div>
 
+            {/* Password */}
             <div style={{ marginBottom: 24 }}>
               <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#1a3d2b', marginBottom: 6 }}>
                 Password
@@ -81,16 +94,30 @@ export default function LoginPage({ onLogin }) {
               <input
                 type="password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={e => { setPassword(e.target.value); setError(''); }}
                 placeholder="Enter your password"
-                style={inputStyle}
+                autoComplete="current-password"
+                style={inputStyle(error && !password)}
               />
             </div>
 
+            {/* Error message */}
             {error && (
-              <p style={{ color: '#c0392b', fontSize: 13, margin: '-12px 0 16px' }}>{error}</p>
+              <div style={{
+                background: '#fef2f2',
+                border: '1px solid #fecaca',
+                borderRadius: 8,
+                padding: '10px 14px',
+                marginBottom: 16,
+                fontSize: 13,
+                color: '#dc2626',
+                fontWeight: 500,
+              }}>
+                {error}
+              </div>
             )}
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -108,13 +135,10 @@ export default function LoginPage({ onLogin }) {
                 transition: 'background 0.2s',
               }}
             >
-              {loading ? 'Signing in…' : 'Sign in'}
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
-          </form>
 
-          <p style={{ textAlign: 'center', fontSize: 12, color: '#8aab9b', marginTop: 20, marginBottom: 0 }}>
-            Demo: use any password
-          </p>
+          </form>
         </div>
 
         {/* Footer */}
@@ -129,13 +153,16 @@ export default function LoginPage({ onLogin }) {
   );
 }
 
-const inputStyle = {
-  width: '100%',
-  padding: '10px 12px',
-  border: '1px solid #c8ddd2',
-  borderRadius: 8,
-  fontSize: 14,
-  outline: 'none',
-  color: '#0f2d1e',
-  background: '#fafcfb',
-};
+function inputStyle(hasError) {
+  return {
+    width: '100%',
+    padding: '10px 12px',
+    border: `1px solid ${hasError ? '#fca5a5' : '#c8ddd2'}`,
+    borderRadius: 8,
+    fontSize: 14,
+    outline: 'none',
+    color: '#0f2d1e',
+    background: '#fafcfb',
+    boxSizing: 'border-box',
+  };
+}
